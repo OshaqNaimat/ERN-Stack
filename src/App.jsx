@@ -1,12 +1,16 @@
 import React from 'react'
+import Add from './Add'
 
 const App = () => {
+
+const [getData, setGetData] = useState([])
 
   const handleData = (e)=>{
       e.preventDefault()
   }
   return (
     <>
+    <Add getData={getData}/>
     <div className="container my-6 rounded-md mx-auto shadow shadow-black p-3 w-[90%] md:w-1/2 lg:w-1/3">
     <form >
       <label htmlFor="" className='font-semibold '>Language</label>
