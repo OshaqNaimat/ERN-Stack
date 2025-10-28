@@ -28,8 +28,8 @@ const Add = ({getData}) => {
         let response = await axios.post('http://localhost:5555/add-language',{
             language,description,type,
         })
-        console.log(response)
         setLoading(false)
+        getData()
     }
 
   return (
