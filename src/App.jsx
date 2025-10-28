@@ -16,6 +16,7 @@ const App = () => {
         <option value="Low Level language">Low Level language</option>
         <option value="High Level language">High Level language</option>
        </select>
+       <button  className='my-2 w-full bg-green-500 rounded-md text-white p-1 cursor-pointer hover:bg-green-600 active:scale-90 duration-100'>Add Language</button>
     </form>
 
     </div>
