@@ -1,9 +1,11 @@
 import React from 'react'
 import axios from 'axios'
 import { useState } from 'react'
+import HashLoader from "react-spinners/HashLoader";
 
 const Add = ({getData}) => {
 
+    const [loading,setLoading] = useState(false)
 
     const [inputs, setInputs] = useState({
         language:"",
@@ -22,10 +24,12 @@ const Add = ({getData}) => {
 
     const handleLanguage = async (e)=>{
         e.preventDefault()
+        setLoading (true)
         let response = await axios.post('http://localhost:5555/add-language',{
-            language,description,type
+            language,description,type,
         })
         console.log(response)
+        setLoading(false)
     }
 
   return (
@@ -43,7 +47,9 @@ const Add = ({getData}) => {
         <option value="Low Level language">Low Level language</option>
         <option value="High Level language">High Level language</option>
        </select>
-       <button onClick={handleLanguage} className='my-2 w-full bg-green-500 rounded-md text-white p-1 cursor-pointer hover:bg-green-600 active:scale-90 duration-100'>Add Language</button>
+       <button onClick={handleLanguage} className='my-2 w-full bg-green-500 rounded-md text-white p-1 cursor-pointer hover:bg-green-600 active:scale-90 duration-100'>
+        {loading ? <HashLoader size={20}/> : "Add Language"}
+        </button>
     </form>
 
     </div>
