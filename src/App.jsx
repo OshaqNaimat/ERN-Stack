@@ -1,6 +1,10 @@
 import React from 'react'
 
 const App = () => {
+
+  const handleData = (e)=>{
+      e.preventDefault()
+  }
   return (
     <>
     <div className="container my-6 rounded-md mx-auto shadow shadow-black p-3 w-[90%] md:w-1/2 lg:w-1/3">
@@ -16,7 +20,7 @@ const App = () => {
         <option value="Low Level language">Low Level language</option>
         <option value="High Level language">High Level language</option>
        </select>
-       <button  className='my-2 w-full bg-green-500 rounded-md text-white p-1 cursor-pointer hover:bg-green-600 active:scale-90 duration-100'>Add Language</button>
+       <button onClick={handleData} className='my-2 w-full bg-green-500 rounded-md text-white p-1 cursor-pointer hover:bg-green-600 active:scale-90 duration-100'>Add Language</button>
     </form>
 
     </div>
