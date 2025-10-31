@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Add from './Add';
+import Edit from './Edit';
 import axios from 'axios';
 
 const App = () => {
   const url = "http://localhost:5555";
   const [languages, setLanguages] = useState([]);
+  const [editData, setEditData] = useState(null);
 
   const getData = async () => {
-    try {
-      const res = await axios.get(`${url}/coding-languages`);
-      setLanguages(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    const res = await axios.get(`${url}/coding-languages`);
+    setLanguages(res.data);
   };
 
   useEffect(() => {
@@ -28,24 +26,34 @@ const App = () => {
     <>
       <Add getData={getData} />
 
-      {languages.length === 0 && (
-        <p className="text-center text-gray-500">No Languages Added Yet</p>
+      {editData && (
+        <Edit editData={editData} setEditData={setEditData} getData={getData} />
       )}
 
+      <h2 className="text-center mt-4 font-bold text-xl">Languages List</h2>
+
       {languages.map((item) => (
-        // < className='w-[90%] lg:w-1/md:w-1/2 shadow '>
-        <div key={item.id} className="shadow p-3 my-3 w-[90] md:w-1/2 lg:w-1/3  mx-auto rounded">
+        <div key={item.id} className="shadow p-3 my-3 w-1/2 mx-auto rounded">
           <h3 className="text-xl font-bold">{item.language}</h3>
           <p>{item.description}</p>
           <p className="text-sm italic">({item.type})</p>
-          <button
-            className="bg-red-600 mt-2 text-white px-3 rounded"
-            onClick={() => deleteLang(item.id)}
+
+          <div className="flex gap-3 mt-2">
+            <button
+              className="bg-red-600 text-white px-3 py-1 rounded"
+              onClick={() => deleteLang(item.id)}
             >
-            Delete
-          </button>
+              Delete
+            </button>
+
+            <button
+              className="bg-blue-600 text-white px-3 py-1 rounded"
+              onClick={() => setEditData(item)}
+            >
+              Edit
+            </button>
+          </div>
         </div>
-            // </>
       ))}
     </>
   );
