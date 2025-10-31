@@ -1,62 +1,93 @@
-import React from 'react'
-import axios from 'axios'
-import { useState } from 'react'
+import React, { useState } from 'react';
+import axios from 'axios';
 import HashLoader from "react-spinners/HashLoader";
 
-const Add = ({getData}) => {
+const Add = ({ getData }) => {
+  const [loading, setLoading] = useState(false);
+  const [inputs, setInputs] = useState({
+    language: "",
+    description: "",
+    type: "",
+  });
 
-    const [loading,setLoading] = useState(false)
+  const { language, description, type } = inputs;
 
-    const [inputs, setInputs] = useState({
-        language:"",
-        description:"",
-        type:''
-    })
+  const handleChange = (e) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    const {language,description,type} = inputs
- 
-    const handleChange = (e)=>{
-          setInputs({
-            ...inputs,
-            [e.target.name] : e.target.value
-          })
+  const handleLanguage = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await axios.post("http://localhost:5555/add-language", {
+        language,
+        description,
+        type,
+      });
+
+      setInputs({
+        language: "",
+        description: "",
+        type: "",
+      });
+
+      getData();
+    } catch (err) {
+      console.log(err);
     }
 
-    const handleLanguage = async (e)=>{
-        e.preventDefault()
-        setLoading (true)
-        let response = await axios.post('http://localhost:5555/add-language',{
-            language,description,type,
-        })
-        setLoading(false)
-        getData()
-    }
+    setLoading(false);
+  };
 
   return (
-    <>
-    <div className="container my-6 rounded-md mx-auto shadow shadow-black p-3 w-[90%] md:w-1/2 lg:w-1/3">
-    <form >
-      <label htmlFor="" className='font-semibold '>Language</label>
-      <input value={language} onChange={handleChange} name='language' type="text"  placeholder='e.g Javascript' className='w-full outline-0 border-1
-       rounded-md p-1 border-red-500' />
-       <label htmlFor="" className='font-semibold '>Description</label>
-       <textarea value={description} onChange={handleChange} name='description'  placeholder='About Language .....' className='w-full p-2 outline-0 border-1 rounded-md border-green-500'></textarea>
-       <label htmlFor="" className='font-semibold '>Type</label>
-       <select value={type} onChange={handleChange} id="" name='type'  className='w-full p-1 outline-0 border-1 rounded-md border-blue-500'>
-        <option value="Assembly language">Assembly language</option>
-        <option value="Low Level language">Low Level language</option>
-        <option value="High Level language">High Level language</option>
-       </select>
-       <button onClick={handleLanguage} className='my-2 w-full bg-green-500 rounded-md text-white p-1 cursor-pointer hover:bg-green-600 active:scale-90 duration-100'>
-        {loading ? <HashLoader size={20}/> : "Add Language"}
+    <div className="container flex w-1/2  mx-auto p-5 shadow-lg shadow-black rounded-md mt-5 rounded">
+      <form onSubmit={handleLanguage}>
+        <label>Language</label>
+        <input
+          value={language}
+          name="language"
+          type="text"
+          placeholder="e.g. JavaScript"
+          onChange={handleChange}
+          className="w-full border p-2 outline-0 border-red-500 border-2 rounded-md shadow-lg"
+        />
+
+        <label>Description</label>
+        <textarea
+          value={description}
+          name="description"
+          placeholder="About language..."
+          onChange={handleChange}
+          className="w-full border p-2 outline-0 border-green-700 border-2 rounded-md shadow-lg"
+        />
+
+        <label>Type</label>
+        <select
+          value={type}
+          name="type"
+          onChange={handleChange}
+          className="w-full border p-2 outline-0 border-blue-500 border-2 rounded-md shadow-lg"
+        >
+          <option value="">Select Type</option>
+          <option value="Assembly language">Assembly language</option>
+          <option value="Low Level language">Low Level language</option>
+          <option value="High Level language">High Level language</option>
+        </select>
+
+        <button
+          type="submit"
+          className="bg-green-600 text-white w-full py-2 mt-3 rounded"
+        >
+          {loading ? <HashLoader size={20} /> : "Add Language"}
         </button>
-    </form>
-
+      </form>
     </div>
-    
-    
-    </>
-  )
-}
+  );
+};
 
-export default Add
+export default Add;
